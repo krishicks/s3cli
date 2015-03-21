@@ -4,15 +4,14 @@ import (
 	"errors"
 	"os"
 
-	amzs3 "launchpad.net/goamz/s3"
 	s3cliclient "s3cli/client"
 )
 
 type putCmd struct {
-	client s3cliclient.S3Client
+	client s3cliclient.Client
 }
 
-func newPut(s3Client s3cliclient.S3Client) Cmd {
+func newPut(s3Client s3cliclient.Client) Cmd {
 	return putCmd{client: s3Client}
 }
 
@@ -29,16 +28,7 @@ func (cmd putCmd) Run(args []string) (err error) {
 		return err
 	}
 
-	stat, err := file.Stat()
-	if err != nil {
-		return err
-	}
+	defer file.Close()
 
-	return cmd.client.PutReader(
-		destination,
-		file,
-		stat.Size(),
-		"application/octet-stream",
-		amzs3.BucketOwnerFull,
-	)
+	return cmd.client.Put(destination, file)
 }

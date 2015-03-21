@@ -5,8 +5,6 @@ import (
 	"io/ioutil"
 	"os"
 	"strconv"
-
-	amzaws "launchpad.net/goamz/aws"
 )
 
 type Config struct {
@@ -42,32 +40,18 @@ func NewConfigFromPath(path string) (Config, error) {
 	return config, nil
 }
 
-func (c Config) AWSRegion() amzaws.Region {
-	return amzaws.Region{
-		Name:        "us-east-1",
-		EC2Endpoint: "https://ec2.us-east-1.amazonaws.com",
-
-		S3Endpoint:           c.s3Endpoint(),
-		S3BucketEndpoint:     "",
-		S3LocationConstraint: false,
-		S3LowercaseBucket:    false,
-
-		SDBEndpoint: "https://sdb.amazonaws.com",
-		SNSEndpoint: "https://sns.us-east-1.amazonaws.com",
-		SQSEndpoint: "https://sqs.us-east-1.amazonaws.com",
-		IAMEndpoint: "https://iam.amazonaws.com",
+func (c Config) Scheme() string {
+	if c.UseSSL {
+		return "https"
 	}
+
+	return "http"
 }
 
-func (c Config) s3Endpoint() string {
+func (c Config) HostWithPort() string {
 	host := "s3.amazonaws.com"
 	if c.Host != "" {
 		host = c.Host
-	}
-
-	scheme := "https"
-	if !c.UseSSL {
-		scheme = "http"
 	}
 
 	portSuffix := ""
@@ -75,5 +59,5 @@ func (c Config) s3Endpoint() string {
 		portSuffix = ":" + strconv.Itoa(c.Port)
 	}
 
-	return scheme + "://" + host + portSuffix
+	return host + portSuffix
 }

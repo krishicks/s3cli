@@ -14,7 +14,7 @@ type concreteFactory struct {
 	cmds map[string]Cmd
 }
 
-func NewFactory(s3Client s3cliclient.S3Client) (factory Factory) {
+func NewFactory(s3Client s3cliclient.Client) (factory Factory) {
 	return concreteFactory{
 		cmds: map[string]Cmd{
 			"get": newGet(s3Client),
