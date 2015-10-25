@@ -1,13 +1,7 @@
-# S3 CLI written in pure Go
+# S3 CLI
 
-## Using Go AMZ
+* IRC: [`#bosh` on freenode](https://webchat.freenode.net/?channels=bosh)
+* Mailing list: [cf-bosh](https://lists.cloudfoundry.org/pipermail/cf-bosh)
+* CI: <https://main.bosh-ci.cf-app.com/pipelines/s3cli>
 
-We are using Go AMZ library under the LGPL v3 License for this CLI.
-To change the version being used by the CLI follow these steps:
-
- * Install go
- * Change the source code used for GoAMZ (whichever version you want), it's under src/launchpad.net/goamz
- * Compile the new version with go/build
- * Get the updated binary from out/s3
-
-See GoAMZ home page for more details on the library: https://wiki.ubuntu.com/goamz
+This CLI provides S3-compatible blobstore support for the [BOSH Agent](https://github.com/cloudfoundry/bosh-agent).
